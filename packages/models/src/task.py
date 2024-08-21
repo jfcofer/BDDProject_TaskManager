@@ -11,7 +11,7 @@ class Task:
     id: int
     title: str
     description: str
-    due_date: date
+    dueDate: date
     user: User
-    current_status: Status = Status.PENDING
-    current_priority: Priority = Priority.PRIORITY_1
+    currentStatus: Status = Status.PENDING
+    currentPriority: Priority = Priority.PRIORITY_1
