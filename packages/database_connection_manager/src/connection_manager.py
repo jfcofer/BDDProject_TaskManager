@@ -1,20 +1,23 @@
+from typing import Any, Optional
+
+from psycopg2.extensions import connection
 from psycopg2.pool import SimpleConnectionPool
 
 from .database_configuration import DatabaseConfiguration
 
 
 class ConnectionManager:
-    _instance = None
+    _instance: Optional["ConnectionManager"] = None
+    _connectionPool: Optional[SimpleConnectionPool] = None
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args: Any, **kwargs: Any) -> "ConnectionManager":
         if cls._instance is None:
-            cls._instance = super(ConnectionManager, cls).__new__(cls)
-            cls._instance._connection_pool = None
+            cls._instance = super().__new__(cls)
         return cls._instance
 
-    def initialize(self, *, databaseConfiguration: DatabaseConfiguration):
-        if self._connection_pool is None:
-            self._connection_pool = SimpleConnectionPool(
+    def initialize(self, *, databaseConfiguration: DatabaseConfiguration) -> None:
+        if self._connectionPool is None:
+            self._connectionPool = SimpleConnectionPool(
                 minconn=databaseConfiguration.minconn,
                 maxconn=databaseConfiguration.maxconn,
                 dbname=databaseConfiguration.dbname,
@@ -24,15 +27,15 @@ class ConnectionManager:
                 port=databaseConfiguration.port,
             )
 
-    def get_connection(self):
-        if self._connection_pool is None:
+    def get_connection(self) -> connection:
+        if self._connectionPool is None:
             raise Exception("Connection pool is not initialized.")
-        return self._connection_pool.getconn()
+        return self._connectionPool.getconn()
 
-    def release_connection(self, *, conn):
-        if self._connection_pool is not None:
-            self._connection_pool.putconn(conn)
+    def release_connection(self, *, conn: connection) -> None:
+        if self._connectionPool is not None:
+            self._connectionPool.putconn(conn)
 
-    def close_all_connections(self):
-        if self._connection_pool is not None:
-            self._connection_pool.closeall()
+    def close_all_connections(self) -> None:
+        if self._connectionPool is not None:
+            self._connectionPool.closeall()
