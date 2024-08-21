@@ -13,7 +13,9 @@ class DatabaseUserApi(UserApi, DatabaseApi):
         super().__init__(connectionManager=connectionManager)
 
     def getUserById(self, *, userId: int) -> User:
-        userData = self._execute_stored_procedure("get_user_info", (userId,))
+        userData = self._executeStoredProcedure(
+            procedureName="get_user_info", params=(userId,)
+        )
         return User(
             id=userData[0]["id"],
             email=userData[0]["email"],
@@ -22,18 +24,21 @@ class DatabaseUserApi(UserApi, DatabaseApi):
         )
 
     def updateUser(self, *, user: User):
-        self._execute_stored_procedure(
-            "update_user", (user.email, user.firstName, user.lastName)
+        self._executeStoredProcedure(
+            procedureName="update_user",
+            params=(user.email, user.firstName, user.lastName),
         )
 
     def getReportsForUser(self, *, user: User) -> List[Report]:
-        reportsData = self._execute_stored_procedure("get_user_reports", (user.id,))
+        reportsData = self._executeStoredProcedure(
+            procedureName="get_user_reports", params=(user.id,)
+        )
         return [
-            Report(id=report["id"], creation_date=report["creation_date"])
+            Report(id=report["id"], creationDate=report["creation_date"], user=user)
             for report in reportsData
         ]
 
     def addReportForUser(self, *, report: Report):
-        self._execute_stored_procedure(
-            "add_report", (report.creationDate, report.user.id)
+        self._executeStoredProcedure(
+            procedureName="add_report", params=(report.creationDate, report.user.id)
         )

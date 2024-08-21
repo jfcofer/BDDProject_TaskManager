@@ -9,16 +9,16 @@ class DatabaseApi:
         self.connectionManager = connectionManager
 
     def _getConnection(self):
-        return self.connectionManager.get_connection()
+        return self.connectionManager.getConnection()
 
     def _releaseConnection(self, *, conn: connection):
-        self.connectionManager.release_connection(conn=conn)
+        self.connectionManager.releaseConnection(conn=conn)
 
-    def _executeStoredProcedure(self, *, procedure_name, params):
-        conn = self._get_connection()
+    def _executeStoredProcedure(self, *, procedureName, params):
+        conn = self._getConnection()
         try:
             with conn.cursor() as cursor:
-                cursor.execute(f"CALL {procedure_name}(%s)", params)
+                cursor.execute(f"CALL {procedureName}(%s)", params)
                 if cursor.description:  # If the stored procedure returns data
                     return cursor.fetchall()
         except psycopg2.Error as e:

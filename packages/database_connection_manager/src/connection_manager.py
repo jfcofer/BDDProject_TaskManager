@@ -27,15 +27,15 @@ class ConnectionManager:
                 port=databaseConfiguration.port,
             )
 
-    def get_connection(self) -> connection:
+    def getConnection(self) -> connection:
         if self._connectionPool is None:
             raise Exception("Connection pool is not initialized.")
         return self._connectionPool.getconn()
 
-    def release_connection(self, *, conn: connection) -> None:
+    def releaseConnection(self, *, conn: connection) -> None:
         if self._connectionPool is not None:
             self._connectionPool.putconn(conn)
 
-    def close_all_connections(self) -> None:
+    def closeAllConnections(self) -> None:
         if self._connectionPool is not None:
             self._connectionPool.closeall()

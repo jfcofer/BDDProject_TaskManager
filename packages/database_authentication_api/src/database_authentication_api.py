@@ -12,8 +12,10 @@ class DatabaseAuthenticationApi(AuthenticationApi, DatabaseApi):
     def __init__(self, *, connectionManager: ConnectionManager) -> None:
         super().__init__(connectionManager=connectionManager)
 
-    def authenticate_user(self, email: str, password: str) -> Optional[User]:
-        userData = self._executeStoredProcedure("authenticate_user", (email, password))
+    def authenticateUser(self, *, email: str, password: str) -> Optional[User]:
+        userData = self._executeStoredProcedure(
+            procedureName="authenticate_user", params=(email, password)
+        )
         if userData:
             return User(
                 id=userData[0]["id"],
@@ -23,11 +25,12 @@ class DatabaseAuthenticationApi(AuthenticationApi, DatabaseApi):
             )
         return None
 
-    def register_user(
-        self, email: str, password: str, first_name: str, last_name: str
+    def registerUser(
+        self, *, email: str, password: str, first_name: str, last_name: str
     ) -> User:
         userData = self._executeStoredProcedure(
-            "register_user", (email, password, first_name, last_name)
+            procedureName="register_user",
+            params=(email, password, first_name, last_name),
         )
         return User(
             id=userData[0]["id"],
