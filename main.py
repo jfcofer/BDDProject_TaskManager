@@ -2,10 +2,16 @@ from os import getenv
 
 from dotenv import load_dotenv
 
+from packages.authentication_repository import AuthenticationRepository
+from packages.database_authentication_api import DatabaseAuthenticationApi
 from packages.database_connection_manager import (
     ConnectionManager,
     DatabaseConfiguration,
 )
+from packages.database_task_api import DatabaseTaskApi
+from packages.database_user_api import DatabaseUserApi
+from packages.task_repository import TaskRepository
+from packages.user_repository import UserRepository
 
 
 def main():
@@ -24,3 +30,13 @@ def main():
 
     connectionManager = ConnectionManager()
     connectionManager.initialize(databaseConfiguration=databaseConfiguration)
+
+    userApi = DatabaseUserApi(connectionManager=connectionManager)
+    taskApi = DatabaseTaskApi(connectionManager=connectionManager)
+    authenticationApi = DatabaseAuthenticationApi(connectionManager=connectionManager)
+
+    userRepository = UserRepository(userApi=userApi)
+    taskReposiotry = TaskRepository(taskApi=taskApi)
+    authenticationRepository = AuthenticationRepository(
+        authenticationApi=authenticationApi
+    )

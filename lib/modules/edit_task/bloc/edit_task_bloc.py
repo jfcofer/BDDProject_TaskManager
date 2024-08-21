@@ -1,4 +1,5 @@
 from packages.models import Task
+from packages.task_repository import TaskRepository
 
 from .edit_task_event import EditTaskEvent, EditTaskTitleChanged
 from .edit_task_state import EditTaskState
@@ -12,7 +13,6 @@ class EditTaskBloc:
     def add(self, *, event: EditTaskEvent):
         if isinstance(event, EditTaskTitleChanged):
             self._onEditTaskTitleChanged(event.title)
-        
 
     def _onEditTaskTitleChanged(self, *, event: EditTaskTitleChanged):
         self.state = self.state.title = event.title
