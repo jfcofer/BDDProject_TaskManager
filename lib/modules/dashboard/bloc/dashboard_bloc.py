@@ -1,8 +1,7 @@
 from packages.models import User
 from packages.task_repository import TaskRepository
-from .dashboard_state import DashboardState
 from .dashboard_events import DashboardEvent, DashboardSubscriptionRequested
-
+from .dashboard_state import DashboardState
 
 class DashboardBloc:
     def __init__(self, *, taskRepository: TaskRepository, user: User) -> None:
@@ -15,5 +14,5 @@ class DashboardBloc:
             self._onDashboardSubscriptionRequested(event=event)
 
     def _onDashboardSubscriptionRequested(self, *, event: DashboardSubscriptionRequested):
-        tasks = self.taskRepository.getTasksForUser(user=self.user)
-        self.state = DashboardState(tasks=tasks)
+        self.state.tasks = self.taskRepository.getTasksForUser(user=self.user)
+        self.state.calculateValues()
