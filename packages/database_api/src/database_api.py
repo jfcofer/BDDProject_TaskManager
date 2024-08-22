@@ -1,5 +1,6 @@
 import psycopg2
 from psycopg2.extensions import connection
+from psycopg2.extras import DictCursor
 
 from packages.database_connection_manager import ConnectionManager
 
@@ -17,7 +18,7 @@ class DatabaseApi:
     def _executeStoredProcedure(self, *, procedureName: str, params: tuple):
         conn = self._getConnection()
         try:
-            with conn.cursor() as cursor:
+            with conn.cursor(cursor_factory=DictCursor) as cursor:
                 cursor.callproc(procedureName, params)
                 if cursor.description:  # If the stored procedure returns data
                     return cursor.fetchall()

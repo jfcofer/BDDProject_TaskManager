@@ -10,7 +10,7 @@ class AuthenticationRepository:
 
     def registerUser(
         self, *, email: str, password: str, firstName: str, lastName: str
-    ) -> User:
+    ) -> None:
         self.authenticationApi.registerUser(
             email=email, password=password, firstName=firstName, lastName=lastName
         )

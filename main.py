@@ -23,7 +23,7 @@ def main():
         user=getenv("DB_USER"),
         password=getenv("DB_PASSWORD"),
         host=getenv("DB_HOST"),
-        port=getenv("DB_PORT"),
+        port=getenv("DB_PORT", 5432),
         minconn=int(getenv("DB_MINCONN", 1)),
         maxconn=int(getenv("DB_MAXCONN", 10)),
     )
@@ -40,3 +40,14 @@ def main():
     authenticationRepository = AuthenticationRepository(
         authenticationApi=authenticationApi
     )
+
+    authenticationRepository.registerUser(
+        email="jfrancisco.fernandez.ramos@gmail.com",
+        firstName="Juan",
+        lastName="Fernandez",
+        password="hola",
+    )
+
+
+if __name__ == "__main__":
+    main()

@@ -8,7 +8,7 @@ class AuthenticationApi(ABC):
     @abstractmethod
     def registerUser(
         self, *, email: str, password: str, firstName: str, lastName: str
-    ) -> User:
+    ) -> None:
         pass
 
     @abstractmethod
