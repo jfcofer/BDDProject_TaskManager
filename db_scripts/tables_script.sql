@@ -1,6 +1,6 @@
 CREATE TYPE status AS ENUM ('Completado', 'En Progreso', 'Pendiente');
 CREATE TYPE priority AS ENUM ('P1', 'P2', 'P3', 'P4');
-CREATE TABLE IF NOT EXISTS 'user' (
+CREATE TABLE IF NOT EXISTS "user" (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS 'user' (
 CREATE TABLE IF NOT EXISTS report (
     id SERIAL PRIMARY KEY,
     creation_date DATE NOT NULL,
-    user_id INT NOT NULL REFERENCES 'user' (id),
+    user_id INT NOT NULL REFERENCES "user" (id),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS task (
     due_date DATE,
     current_status status NOT NULL DEFAULT 'Pendiente',
     current_priority priority NOT NULL DEFAULT 'P1',
-    user_id INT NOT NULL REFERENCES user (id),
+    user_id INT NOT NULL REFERENCES "user"(id),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

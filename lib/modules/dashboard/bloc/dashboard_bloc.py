@@ -15,4 +15,5 @@ class DashboardBloc:
             self._onDashboardSubscriptionRequested(event=event)
 
     def _onDashboardSubscriptionRequested(self, *, event: DashboardSubscriptionRequested):
-        self.state.tasks = self.taskRepository.getTasksForUser(user=self.user)
+        tasks = self.taskRepository.getTasksForUser(user=self.user)
+        self.state = DashboardState(tasks=tasks)

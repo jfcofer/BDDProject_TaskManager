@@ -14,18 +14,18 @@ class DatabaseTaskApi(TaskApi, DatabaseApi):
         super().__init__(connectionManager=connectionManager)
 
     def getTasksForUser(self, *, user: User) -> List[Task]:
-        tasksData = self._executeStoredProcedure(
+        tasksData = self._executeStoredProcedureWithReturn(
             procedureName="get_tasks_for_user", params=(user.id,)
         )
         if tasksData:
             return [
                 Task(
-                    id=taskData["id"],
-                    title=taskData["title"],
-                    description=taskData["description"],
-                    dueDate=taskData["due_date"],
-                    currentStatus=Status(taskData["status"]),
-                    currentPriority=Priority(taskData["priority"]),
+                    id=taskData[0],
+                    title=taskData[1],
+                    description=taskData[2],
+                    dueDate=taskData[3],
+                    currentStatus=Status(taskData[4]),
+                    currentPriority=Priority(taskData[5]),
                     user=user,
                 )
                 for taskData in tasksData
@@ -63,7 +63,7 @@ class DatabaseTaskApi(TaskApi, DatabaseApi):
                 task.title,
                 task.description,
                 task.currentStatus.value,
-                task.currentStatus.value,
+                task.currentPriority.value,
             ),
         )
 
@@ -71,17 +71,17 @@ class DatabaseTaskApi(TaskApi, DatabaseApi):
         self._executeStoredProcedure(procedureName="delete_task", params=(task.id,))
 
     def getSubtasksForTask(self, *, task: Task) -> List[Subtask]:
-        subtasksData = self._executeStoredProcedure(
+        subtasksData = self._executeStoredProcedureWithReturn(
             procedureName="get_subtasks_for_task", params=(task.id,)
         )
         if subtasksData:
 
             return [
                 Subtask(
-                    id=subtask["id"],
-                    title=subtask["title"],
-                    currentStatus=Status(subtask["status"]),
-                    currentPriority=Priority(subtask["priority"]),
+                    id=subtask[0],
+                    title=subtask[1],
+                    currentStatus=Status(subtask[2]),
+                    currentPriority=Priority(subtask[3]),
                     mainTask=task,
                 )
                 for subtask in subtasksData
@@ -114,7 +114,7 @@ class DatabaseTaskApi(TaskApi, DatabaseApi):
                 subtask.id,
                 subtask.title,
                 subtask.currentStatus.value,
-                subtask.currentStatus.value,
+                subtask.currentPriority.value,
             ),
         )
 
@@ -125,16 +125,16 @@ class DatabaseTaskApi(TaskApi, DatabaseApi):
         )
 
     def getRemindersForTask(self, task: Task) -> List[Reminder]:
-        remindersData = self._executeStoredProcedure(
+        remindersData = self._executeStoredProcedureWithReturn(
             procedureName="get_reminders_for_task", params=(task.id,)
         )
         if remindersData:
 
             return [
                 Reminder(
-                    id=reminder["id"],
-                    description=reminder["description"],
-                    reminderDate=reminder["reminderDate"],
+                    id=reminder[0],
+                    description=reminder[1],
+                    reminderDate=reminder[2],
                     task=task,
                 )
                 for reminder in remindersData

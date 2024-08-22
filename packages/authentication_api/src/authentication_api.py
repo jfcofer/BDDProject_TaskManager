@@ -12,5 +12,5 @@ class AuthenticationApi(ABC):
         pass
 
     @abstractmethod
-    def authenticateUser(self, *, email: str, password: str) -> Optional[User]:
+    def authenticateUser(self, *, email: str, password: str) -> User | None:
         pass

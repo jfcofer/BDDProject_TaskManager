@@ -4,10 +4,8 @@ from dotenv import load_dotenv
 
 from packages.authentication_repository import AuthenticationRepository
 from packages.database_authentication_api import DatabaseAuthenticationApi
-from packages.database_connection_manager import (
-    ConnectionManager,
-    DatabaseConfiguration,
-)
+from packages.database_connection_manager import (ConnectionManager,
+                                                  DatabaseConfiguration)
 from packages.database_task_api import DatabaseTaskApi
 from packages.database_user_api import DatabaseUserApi
 from packages.task_repository import TaskRepository
@@ -41,12 +39,9 @@ def main():
         authenticationApi=authenticationApi
     )
 
-    authenticationRepository.registerUser(
-        email="jfrancisco.fernandez.ramos@gmail.com",
-        firstName="Juan",
-        lastName="Fernandez",
-        password="hola",
-    )
+    user = authenticationRepository.authenticateUser(email="jfrancisco.fernandez.ramos@gmail.com",password="hola")
+    print(user)
+    print("hola")
 
 
 if __name__ == "__main__":

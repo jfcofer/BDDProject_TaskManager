@@ -3,7 +3,7 @@ SELECT id,
     first_name,
     last_name,
     email
-FROM user;
+FROM "user";
 CREATE VIEW report_view AS
 SELECT id,
     creation_date,

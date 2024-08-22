@@ -14,26 +14,26 @@ class DatabaseAuthenticationApi(AuthenticationApi, DatabaseApi):
     def __init__(self, *, connectionManager: ConnectionManager) -> None:
         super().__init__(connectionManager=connectionManager)
 
-    def authenticateUser(self, *, email: str, password: str) -> Optional[User]:
-        userData = self._executeStoredProcedure(
+    def authenticateUser(self, *, email: str, password: str) -> User | None:
+        userData = self._executeStoredProcedureWithReturn(
             procedureName="authenticate_user", params=(email,)
         )
 
         if userData:
-            stored_hashed_password = userData[0]["password"]
+            print(userData)
+            stored_hashed_password = userData[0][4]
 
             # Verify the password
             if bcrypt.checkpw(
                 password.encode("utf-8"), stored_hashed_password.encode("utf-8")
             ):
-
-                return User(
-                    id=userData[0]["id"],
-                    email=userData[0]["email"],
-                    firstName=userData[0]["first_name"],
-                    lastName=userData[0]["last_name"],
+                print(userData[0][0], userData[0][1], userData[0][2], userData[0][3])
+                user = User(
+                    int(userData[0][0]), userData[0][1], userData[0][2], userData[0][3]
                 )
-        return None
+                print(user)
+                return user
+            return None
 
     def registerUser(
         self, *, email: str, password: str, firstName: str, lastName: str
@@ -43,7 +43,7 @@ class DatabaseAuthenticationApi(AuthenticationApi, DatabaseApi):
 
         # Convert the hashed password to a string if necessary
         hashed_password = hashed_password.decode("utf-8")
-
+        print(f"Registering user: {email}, {hashed_password}, {firstName}, {lastName}")
         self._executeStoredProcedure(
             procedureName="register_user",
             params=(email, hashed_password, firstName, lastName),

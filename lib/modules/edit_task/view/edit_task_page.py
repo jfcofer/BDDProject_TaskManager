@@ -2,7 +2,7 @@ from typing import Any, Tuple
 
 import customtkinter as ctk
 
-from packages.models import Task
+from packages.models import Task, Status
 from packages.task_repository import TaskRepository
 
 from ..bloc.edit_task_bloc import EditTaskBloc
@@ -44,9 +44,6 @@ class EditTaskPage(ctk.CTkFrame):
         self._build()
 
     def _build(self):
-        entrada(info_inicial=self.bloc.state.title)
-
-        stringvar entrada1
-
-        trace(self.bloc.add(event=EditTaskTitleChanged(title=new_title)))
+        opciones = [status.value for status in Status]
+        opcionEscogida = self.bloc.state.currentStatus.value
         

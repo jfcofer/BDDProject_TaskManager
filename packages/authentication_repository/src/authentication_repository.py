@@ -15,5 +15,5 @@ class AuthenticationRepository:
             email=email, password=password, firstName=firstName, lastName=lastName
         )
 
-    def authenticateUser(self, *, email: str, password: str) -> Optional[User]:
+    def authenticateUser(self, *, email: str, password: str) -> User | None:
         self.authenticationApi.authenticateUser(email=email, password=password)
