@@ -27,4 +27,4 @@ class EditTaskBloc:
             dueDate=self.state.dueDate,
             user=self.state.initialTask.user,
         )
-        self.taskRepository.saveTask(task=task)
+        self.taskRepository.updateTask(task=task)
