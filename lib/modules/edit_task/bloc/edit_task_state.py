@@ -18,3 +18,4 @@ class EditTaskState:
         self.currentStatus = initialTask.currentStatus
         self.currentPriority = initialTask.currentPriority
         self.status = EditTaskStatus.initial
+        self.dueDate = initialTask.dueDate

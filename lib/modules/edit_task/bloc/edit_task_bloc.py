@@ -12,10 +12,10 @@ class EditTaskBloc:
 
     def add(self, *, event: EditTaskEvent):
         if isinstance(event, EditTaskTitleChanged):
-            self._onEditTaskTitleChanged(event.title)
+            self._onEditTaskTitleChanged(event=event)
 
     def _onEditTaskTitleChanged(self, *, event: EditTaskTitleChanged):
-        self.state = self.state.title = event.title
+        self.state.title = event.title
 
     def _onEditTaskSubmitted(self):
         task = Task(
@@ -24,5 +24,7 @@ class EditTaskBloc:
             description=self.state.description,
             currentPriority=self.state.currentPriority,
             currentStatus=self.state.currentStatus,
+            dueDate=self.state.dueDate,
+            user=self.state.initialTask.user,
         )
-        self.taskRepository.saveTask(task)
+        self.taskRepository.saveTask(task=task)
