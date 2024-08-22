@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
+from datetime import date
 from typing import List
 
-from packages.models import Reminder, Subtask, Task, User
+from packages.models import Priority, Reminder, Status, Subtask, Task, User
 
 
 class TaskApi(ABC):
@@ -10,7 +11,20 @@ class TaskApi(ABC):
         pass
 
     @abstractmethod
-    def saveTask(self, *, task: Task) -> None:
+    def saveTask(
+        self,
+        *,
+        user: User,
+        taskTitle: str,
+        taskDescription: str,
+        taskDate: date,
+        taskStatus: Status = Status.PENDING,
+        taskPriority: Priority = Priority.PRIORITY_1
+    ) -> None:
+        pass
+
+    @abstractmethod
+    def updateTask(self, *, task: Task) -> None:
         pass
 
     @abstractmethod
@@ -22,7 +36,18 @@ class TaskApi(ABC):
         pass
 
     @abstractmethod
-    def saveSubtask(self, *, subtask: Subtask) -> None:
+    def saveSubtask(
+        self,
+        *,
+        mainTask: Task,
+        subtaskTitle: str,
+        subtaskStatus: Status = Status.PENDING,
+        subtaskPriority: Priority = Priority.PRIORITY_1
+    ) -> None:
+        pass
+
+    @abstractmethod
+    def updateSubtask(self, *, subtask: Subtask) -> None:
         pass
 
     @abstractmethod
@@ -34,7 +59,9 @@ class TaskApi(ABC):
         pass
 
     @abstractmethod
-    def saveReminder(self, *, reminder: Reminder) -> None:
+    def saveReminder(
+        self, *, task: Task, reminderDescription: str, reminderDate: date
+    ) -> None:
         pass
 
     @abstractmethod

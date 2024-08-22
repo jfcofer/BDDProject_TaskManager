@@ -68,7 +68,7 @@ class DatabaseTaskApi(TaskApi, DatabaseApi):
         )
 
     def deleteTask(self, *, task: Task) -> None:
-        self._executeStoredProcedure(procedureName="delete_task", params=(task.id))
+        self._executeStoredProcedure(procedureName="delete_task", params=(task.id,))
 
     def getSubtasksForTask(self, *, task: Task) -> List[Subtask]:
         subtasksData = self._executeStoredProcedure(
