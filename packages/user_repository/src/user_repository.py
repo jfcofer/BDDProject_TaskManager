@@ -11,11 +11,11 @@ class UserRepository:
     def getUserById(self, *, userId: int) -> User:
         self.userApi.getUserById(userId=userId)
 
-    def updateUser(self, *, user: User):
+    def updateUser(self, *, user: User)->None:
         self.userApi.updateUser(user=user)
 
     def getReportsForUser(self, *, user: User) -> List[Report]:
         self.userApi.getReportsForUser(user=user)
 
-    def addReportForUser(self, *, report: Report):
+    def addReportForUser(self, *, report: Report)->None:
         self.userApi.addReportForUser(report=report)

@@ -14,15 +14,17 @@ class DatabaseApi:
     def _releaseConnection(self, *, conn: connection):
         self.connectionManager.releaseConnection(conn=conn)
 
-    def _executeStoredProcedure(self, *, procedureName, params):
+    def _executeStoredProcedure(self, *, procedureName: str, params: tuple):
         conn = self._getConnection()
         try:
             with conn.cursor() as cursor:
-                cursor.execute(f"CALL {procedureName}(%s)", params)
+                cursor.callproc(procedureName, params)
                 if cursor.description:  # If the stored procedure returns data
                     return cursor.fetchall()
+                conn.commit()
         except psycopg2.Error as e:
             print(f"Database error: {e}")
-            raise  # Re-raise or handle it according to your needs
+            conn.rollback()
+            raise e  # Re-raise or handle it according to your needs
         finally:
             self._releaseConnection(conn=conn)

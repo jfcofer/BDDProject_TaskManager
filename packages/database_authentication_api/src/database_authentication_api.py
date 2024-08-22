@@ -20,21 +20,15 @@ class DatabaseAuthenticationApi(AuthenticationApi, DatabaseApi):
             return User(
                 id=userData[0]["id"],
                 email=userData[0]["email"],
-                first_name=userData[0]["first_name"],
-                last_name=userData[0]["last_name"],
+                firstName=userData[0]["first_name"],
+                lastName=userData[0]["last_name"],
             )
         return None
 
     def registerUser(
         self, *, email: str, password: str, first_name: str, last_name: str
-    ) -> User:
-        userData = self._executeStoredProcedure(
+    ) -> None:
+        self._executeStoredProcedure(
             procedureName="register_user",
             params=(email, password, first_name, last_name),
-        )
-        return User(
-            id=userData[0]["id"],
-            email=userData[0]["email"],
-            first_name=userData[0]["first_name"],
-            last_name=userData[0]["last_name"],
         )

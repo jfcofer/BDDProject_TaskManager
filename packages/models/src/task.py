@@ -5,6 +5,7 @@ from packages.models.src.priority import Priority
 from packages.models.src.status import Status
 from packages.models.src.user import User
 
+from typing import Optional
 
 @dataclass(frozen=True)
 class Task:

@@ -23,7 +23,7 @@ class DatabaseUserApi(UserApi, DatabaseApi):
             lastName=userData[0]["last_name"],
         )
 
-    def updateUser(self, *, user: User):
+    def updateUser(self, *, user: User)->None:
         self._executeStoredProcedure(
             procedureName="update_user",
             params=(user.email, user.firstName, user.lastName),
@@ -38,7 +38,7 @@ class DatabaseUserApi(UserApi, DatabaseApi):
             for report in reportsData
         ]
 
-    def addReportForUser(self, *, report: Report):
+    def addReportForUser(self, *, report: Report)->None:
         self._executeStoredProcedure(
             procedureName="add_report", params=(report.creationDate, report.user.id)
         )
